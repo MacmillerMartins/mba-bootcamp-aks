@@ -7,13 +7,6 @@ steps:
   inputs:
     terraformVersion: '1.2.1'
 
-- task: CmdLine@2
-  displayName: teste
-  inputs:
-    script: |
-      pwd
-      ls -la
-
 - task: TerraformTaskV3@3
   displayName: Terraform Init
   inputs:
@@ -25,25 +18,11 @@ steps:
     backendAzureRmContainerName: 'scmbabootcampfstate'
     backendAzureRmKey: 'terraform.tfstate'
 
-- task: CmdLine@2
-  displayName: teste
-  inputs:
-    script: |
-      pwd
-      ls -la
-
 - task: TerraformTaskV3@3
   displayName: Terraform Validate
   inputs:
     provider: 'azurerm'
     command: 'validate'
-
-- task: CmdLine@2
-  displayName: teste
-  inputs:
-    script: |
-      pwd
-      ls -la
 
 - task: TerraformTaskV3@3
   displayName: Terraform Plan
