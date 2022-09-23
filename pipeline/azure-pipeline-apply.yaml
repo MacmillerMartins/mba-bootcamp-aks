@@ -24,7 +24,6 @@ steps:
     backendAzureRmStorageAccountName: 'sambabootcampfstate'
     backendAzureRmContainerName: 'scmbabootcampfstate'
     backendAzureRmKey: 'terraform.tfstate'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
 
 - task: CmdLine@2
   displayName: teste
@@ -39,6 +38,13 @@ steps:
     provider: 'azurerm'
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
+
+- task: CmdLine@2
+  displayName: teste
+  inputs:
+    script: |
+      pwd
+      ls -la
 
 - task: TerraformTaskV3@3
   displayName: Terraform Plan
