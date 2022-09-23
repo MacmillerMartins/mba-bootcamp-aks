@@ -31,13 +31,6 @@ steps:
     command: 'validate'
 
 - task: TerraformTaskV3@3
-  displayName: Terraform Plan
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
-
-- task: TerraformTaskV3@3
   displayName: Terraform Apply
   inputs:
     provider: 'azurerm'
