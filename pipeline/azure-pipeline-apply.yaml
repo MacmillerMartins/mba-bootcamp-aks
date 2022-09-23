@@ -11,7 +11,6 @@ steps:
   displayName: teste
   inputs:
     script: |
-      cd infra
       pwd
       ls -la
 
