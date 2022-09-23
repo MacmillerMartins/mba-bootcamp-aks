@@ -19,9 +19,9 @@ steps:
     provider: 'azurerm'
     command: 'init'
     backendServiceArm: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
-    backendAzureRmResourceGroupName: 'rg-bootcamp'
-    backendAzureRmStorageAccountName: 'sambabootcamp'
-    backendAzureRmContainerName: 'scmbabootcamp'
+    backendAzureRmResourceGroupName: 'rg-bootcamp-tfstate'
+    backendAzureRmStorageAccountName: 'sambabootcampfstate'
+    backendAzureRmContainerName: 'scmbabootcampfstate'
     backendAzureRmKey: '$(keyStorageAccount)'
 
 - task: TerraformTaskV3@3
@@ -29,6 +29,13 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
+
+- task: TerraformTaskV3@3
+  displayName: Terraform Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
 
 - task: TerraformTaskV3@3
   displayName: Terraform Apply
