@@ -37,7 +37,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
+    workingDirectory: 'infra'
 
 - task: CmdLine@2
   displayName: teste
