@@ -8,10 +8,11 @@ steps:
     terraformVersion: '1.2.1'
 
 - task: CmdLine@2
-  displayName: Access Infra Directory
+  displayName: teste
   inputs:
     script: |
-      cd infra
+      pwd
+      ls -la
 
 - task: TerraformTaskV3@3
   displayName: Terraform Init
@@ -23,12 +24,21 @@ steps:
     backendAzureRmStorageAccountName: 'sambabootcampfstate'
     backendAzureRmContainerName: 'scmbabootcampfstate'
     backendAzureRmKey: 'terraform.tfstate'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
+
+- task: CmdLine@2
+  displayName: teste
+  inputs:
+    script: |
+      pwd
+      ls -la
 
 - task: TerraformTaskV3@3
   displayName: Terraform Validate
   inputs:
     provider: 'azurerm'
     command: 'validate'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
 
 - task: TerraformTaskV3@3
   displayName: Terraform Plan
@@ -36,6 +46,7 @@ steps:
     provider: 'azurerm'
     command: 'plan'
     environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
 
 - task: TerraformTaskV3@3
   displayName: Terraform Apply
@@ -43,3 +54,4 @@ steps:
     provider: 'azurerm'
     command: 'apply'
     environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/infra'
