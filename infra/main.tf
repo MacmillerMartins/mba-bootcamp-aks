@@ -1,8 +1,8 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "rg-bootcamp"
-    storage_account_name = "sambabootcamp"
-    container_name       = "scmbabootcamp"
+    resource_group_name  = "rg-bootcamp-tfstate"
+    storage_account_name = "sambabootcamptfstate"
+    container_name       = "scmbabootcamptfstate"
     key                  = "terraform.tfstate"
   }
 }
@@ -10,9 +10,4 @@ terraform {
 provider "azurerm" {
   features {
   }
-}
-
-resource "azurerm_resource_group" "rg" {
-  name     = "rg-bootcamp"
-  location = "East US"
 }
