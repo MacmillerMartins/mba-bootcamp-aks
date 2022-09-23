@@ -1,0 +1,41 @@
+resources:
+  repositories:
+  - repository: mba-bootcamp-aks
+    type: github
+    endpoint: 'mba-bootcamp-aks'
+    name: MacmillerMartins/mba-bootcamp-aks
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: '1.2.1'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'macmiller(1)(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
+    backendAzureRmResourceGroupName: 'rg-bootcamp'
+    backendAzureRmStorageAccountName: 'sambabootcamp'
+    backendAzureRmContainerName: 'scmbabootcamp'
+    backendAzureRmKey: '$(keyStorageAccount)'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
