@@ -11,6 +11,7 @@ steps:
   displayName: teste
   inputs:
     script: |
+      cd infra
       pwd
       ls -la
 
@@ -37,7 +38,6 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    workingDirectory: 'infra'
 
 - task: CmdLine@2
   displayName: teste
