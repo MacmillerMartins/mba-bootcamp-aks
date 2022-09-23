@@ -22,7 +22,7 @@ steps:
     backendAzureRmResourceGroupName: 'rg-bootcamp-tfstate'
     backendAzureRmStorageAccountName: 'sambabootcampfstate'
     backendAzureRmContainerName: 'scmbabootcampfstate'
-    backendAzureRmKey: '$(keyStorageAccount)'
+    backendAzureRmKey: 'terraform.tfstate'
 
 - task: TerraformTaskV3@3
   displayName: Terraform Validate
