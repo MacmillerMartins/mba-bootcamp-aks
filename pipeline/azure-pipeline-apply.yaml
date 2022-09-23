@@ -7,6 +7,12 @@ steps:
   inputs:
     terraformVersion: '1.2.1'
 
+- task: CmdLine@2
+  displayName: Access Infra Directory
+  inputs:
+    script: |
+      cd infra
+
 - task: TerraformTaskV3@3
   displayName: Terraform Init
   inputs:
