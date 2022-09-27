@@ -1,3 +1,19 @@
+variables:
+# Agent Azure DevOps
+- name: imageAgentAz
+  value: 'ubuntu-latest'
+# Tfstate
+- name: backendServiceArm
+  value: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
+- name: backendAzureRmResourceGroupName
+  value: 'rg-bootcamp-tfstate'
+- name: backendAzureRmStorageAccountName 
+  value: 'sambabootcampfstate'
+- name: backendAzureRmContainerName
+  value: 'scmbabootcampfstate'
+- name: backendAzureRmKey
+  value: 'terraform.tfstate'
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -12,11 +28,11 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
-    backendServiceArm: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
-    backendAzureRmResourceGroupName: 'rg-bootcamp-tfstate'
-    backendAzureRmStorageAccountName: 'sambabootcampfstate'
-    backendAzureRmContainerName: 'scmbabootcampfstate'
-    backendAzureRmKey: 'terraform.tfstate'
+    backendServiceArm: '$(backendServiceArm)'
+    backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+    backendAzureRmStorageAccountName: '$(backendAzureRmStorageAccountName)'
+    backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+    backendAzureRmKey: '$(backendAzureRmKey)'
 
 - task: TerraformTaskV3@3
   displayName: Terraform Validate
@@ -29,4 +45,4 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'destroy'
-    environmentServiceNameAzureRM: 'macmiller(795e0d19-d32c-4ad7-a870-bdc45d74c8d4)'
+    environmentServiceNameAzureRM: '$(backendServiceArm)'
