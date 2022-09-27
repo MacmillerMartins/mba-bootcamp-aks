@@ -29,5 +29,5 @@
       }
     ],
     "type": "kubernetes",
-    "url": "https://aks-bootcamp-75309deb.hcp.eastus.azmk8s.io"
+    "url": "<url_aks_cluster>"
   }
