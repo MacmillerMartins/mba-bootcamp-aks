@@ -1,0 +1,33 @@
+{
+    "administratorsGroup": null,
+    "authorization": {
+      "parameters": {
+        "clusterContext": "aks-bootcamp",
+        "kubeConfig": null
+      },
+      "scheme": "Kubernetes"
+    },
+    "data": {
+      "authorizationType": "Kubeconfig"
+    },
+    "description": "",
+    "groupScopeId": null,
+    "isReady": true,
+    "isShared": false,
+    "name": "sc-aks",
+    "operationStatus": null,
+    "owner": "Library",
+    "readersGroup": null,
+    "serviceEndpointProjectReferences": [
+      {
+        "description": "",
+        "name": "sc-aks",
+        "projectReference": {
+          "id": "d481ac51-679b-44a6-b50c-b8c655124f7c",
+          "name": "mba-bootcamp"
+        }
+      }
+    ],
+    "type": "kubernetes",
+    "url": "https://aks-bootcamp-75309deb.hcp.eastus.azmk8s.io"
+  }
