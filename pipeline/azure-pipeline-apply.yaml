@@ -91,13 +91,13 @@ stages:
       inputs:
         kubectlVersion: 'latest'
     - task: Bash@3
-      displayName: Cat KubeConfig
+      displayName: Pre-Create Service Connect Aks
       inputs:
         targetType: 'inline'
         script: |
           az login -u $(azLogin) -p $(azPassword)
-          az aks get-credentials --resource-group rg-bootcamp --name aks-bootcamp
-          urlAks='kubectl config view --minify -o jsonpath={.clusters[0].cluster.server}'
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
+          urlAks=`kubectl config view --minify -o jsonpath={.clusters[0].cluster.server} | sed 's/:443//g'`
           sed -i -e "s;urlAksTemp;$urlAks;" sc-aks.json
           sed -i -e "s;azureSubscriptionIdTemp;$(azureSubscriptionId);" sc-aks.json
           sed -i -e "s;azureSubscriptionNameTemp;$(azureSubscriptionName);" sc-aks.json
@@ -105,5 +105,45 @@ stages:
           sed -i -e "s;azureTenantIdTemp;$(azureTenantId);" sc-aks.json
           sed -i -e "s;aksServiceConnectTemp;$(aksServiceConnect);" sc-aks.json
           sed -i -e "s;TeamProjectIdTemp;$(System.TeamProjectId);" sc-aks.json
-          az devops service-endpoint create --project mba-bootcamp --organization https://dev.azure.com/MacmillerMartins --service-endpoint-configuration ./sc-aks.json | grep id | sed -n '2p' | awk '{print $2}' | sed 's/"\|,//g' > scAksId
+          pwd
+          ls -la
+          cat sc-aks.json
+    - task: Bash@3
+      displayName: Create Service Connect Aks
+      inputs:
+        targetType: 'inline'
+        script: |
+          az devops service-endpoint create --project $(system.teamProject) --organization $(System.TeamFoundationCollectionUri) --service-endpoint-configuration ./sc-aks.json | grep id | sed -n '3p' | awk '{print $2}' | sed 's/"\|,//g' > scAksId
+          cat scAksId
+    - task: Bash@3
+      displayName: Update Service Connect Aks
+      inputs:
+        targetType: 'inline'
+        script: |
+          az devops configure --defaults organization=$(System.TeamFoundationCollectionUri)
+          az devops configure --defaults project=$(system.teamProject)
           az devops service-endpoint update --id `cat scAksId` --enable-for-all true
+
+- stage: InstallArgoCD
+  displayName: Install Argo CD
+  dependsOn: CreateServiceConnectAks
+  jobs:
+  - job: InstallArgoCD
+    displayName: Install Argo CD
+    pool:
+      vmImage: '$(imageAgentAz)'
+    steps:
+    - task: Bash@3
+      displayName: Create Namespace
+      inputs:
+        targetType: 'inline'
+        script: |
+          az login -u $(azLogin) -p $(azPassword)
+          az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster)
+          kubectl create namespace argocd
+    - task: Bash@3
+      displayName: Install Argo CD
+      inputs:
+        targetType: 'inline'
+        script: |
+          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
