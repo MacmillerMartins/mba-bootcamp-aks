@@ -1,0 +1,41 @@
+{
+  "data": {
+    "authorizationType": "AzureSubscription",
+    "azureSubscriptionId": "azureSubscriptionIdTemp",
+    "azureSubscriptionName": "azureSubscriptionNameTemp",
+    "clusterId": "clusterIdTemp",
+    "namespace": "default"
+  },
+  "description": "",
+  "authorization": {
+    "parameters": {
+        "azureTenantId": "azureTenantIdTemp",
+        "azureEnvironment": "AzureCloud",
+        "serviceAccountName": "azdev-sa-d4cd20",
+        "roleBindingName": "azdev-rb-azdev-sa-d4cd20-admin-on-default",
+        "secretName": "azdev-sa-d4cd20-token-k52pc",
+        "ApiToken": null,
+        "serviceAccountCertificate": null
+    },
+    "scheme": "Kubernetes"
+  },  
+  "groupScopeId": null,
+  "isReady": true,
+  "isShared": false,
+  "operationStatus": null,
+  "owner": "Library",
+  "readersGroup": null,
+  "serviceEndpointProjectReferences": [
+    {
+      "description": "",
+      "name": "aksServiceConnectTemp",
+      "projectReference": {
+        "id": "TeamProjectIdTemp",
+        "name": "mba-bootcamp"
+      }
+    }
+  ],
+  "name": "aksServiceConnectTemp",
+  "type": "kubernetes",
+  "url": "urlAksTemp"
+}

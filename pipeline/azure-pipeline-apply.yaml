@@ -13,6 +13,23 @@ variables:
   value: 'scmbabootcampfstate'
 - name: backendAzureRmKey
   value: 'terraform.tfstate'
+# Aks 
+- name: kubernetesCluster
+  value: 'aks-bootcamp'
+- name: aksServiceConnect
+  value: 'sc-aks'
+# Azure Cloud
+- name: azureTenantId
+  value: '875b34ac-da75-469f-88ba-56aa2314fd24'
+- name: azureResourceGroup
+  value: 'rg-bootcamp'
+- name: azureSubscriptionId
+  value: '795e0d19-d32c-4ad7-a870-bdc45d74c8d4'
+- name: azureSubscriptionName
+  value: 'macmiller'
+- name: clusterId
+  value: "/subscriptions/$(azureSubscriptionId)/resourcegroups/$(azureResourceGroup)/providers/Microsoft.ContainerService/managedClusters/$(kubernetesCluster)"
+
 
 stages:
 
@@ -60,11 +77,12 @@ stages:
         command: 'apply'
         environmentServiceNameAzureRM: '$(backendServiceArm)'
 
-- stage: KubeConfig
-  displayName: KubeConfig
+- stage: CreateServiceConnectAks
+  displayName: Create Service Connect Aks
+  dependsOn: Terraform
   jobs:
-  - job: KubeConfig
-    displayName: KubeConfig
+  - job: CreateServiceConnectAks
+    displayName: Create Service Connect Aks
     pool:
       vmImage: '$(imageAgentAz)'
     steps:
@@ -79,4 +97,13 @@ stages:
         script: |
           az login -u $(azLogin) -p $(azPassword)
           az aks get-credentials --resource-group rg-bootcamp --name aks-bootcamp
-          cat ~/.kube/config
+          urlAks='kubectl config view --minify -o jsonpath={.clusters[0].cluster.server}'
+          sed -i -e "s;urlAksTemp;$urlAks;" sc-aks.json
+          sed -i -e "s;azureSubscriptionIdTemp;$(azureSubscriptionId);" sc-aks.json
+          sed -i -e "s;azureSubscriptionNameTemp;$(azureSubscriptionName);" sc-aks.json
+          sed -i -e "s;clusterIdTemp;$(clusterId);" sc-aks.json
+          sed -i -e "s;azureTenantIdTemp;$(azureTenantId);" sc-aks.json
+          sed -i -e "s;aksServiceConnectTemp;$(aksServiceConnect);" sc-aks.json
+          sed -i -e "s;TeamProjectIdTemp;$(System.TeamProjectId);" sc-aks.json
+          az devops service-endpoint create --project mba-bootcamp --organization https://dev.azure.com/MacmillerMartins --service-endpoint-configuration ./sc-aks.json | grep id | sed -n '2p' | awk '{print $2}' | sed 's/"\|,//g' > scAksId
+          az devops service-endpoint update --id `cat scAksId` --enable-for-all true
