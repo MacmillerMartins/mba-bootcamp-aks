@@ -36,8 +36,8 @@ stages:
 - stage: InstallAks
   displayName: Install Aks
   jobs:
-  - job: Terraform
-    displayName: Terraform
+  - job: InstallAks
+    displayName: Install Aks
     pool:
       vmImage: '$(imageAgentAz)'
     steps:
@@ -105,16 +105,12 @@ stages:
           sed -i -e "s;azureTenantIdTemp;$(azureTenantId);" sc-aks.json
           sed -i -e "s;aksServiceConnectTemp;$(aksServiceConnect);" sc-aks.json
           sed -i -e "s;TeamProjectIdTemp;$(System.TeamProjectId);" sc-aks.json
-          pwd
-          ls -la
-          cat sc-aks.json
     - task: Bash@3
       displayName: Create SC Aks
       inputs:
         targetType: 'inline'
         script: |
           az devops service-endpoint create --project $(system.teamProject) --organization $(System.TeamFoundationCollectionUri) --service-endpoint-configuration ./sc-aks.json | grep id | sed -n '3p' | awk '{print $2}' | sed 's/"\|,//g' > scAksId
-          cat scAksId
     - task: Bash@3
       displayName: Update SC Aks
       inputs:
@@ -153,7 +149,7 @@ stages:
         targetType: 'inline'
         script: |
           kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-          sleep 30
+          sleep 60
     - task: Bash@3
       displayName: Install CLI Argo CD
       inputs:
