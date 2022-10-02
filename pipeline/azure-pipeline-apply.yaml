@@ -175,4 +175,5 @@ stages:
         targetType: 'inline'
         script: |
           ./argocd account generate-token --account scazdevops > scazdevopsToken
+          cat scazdevopsToken
           ./argocd login `cat argocdServer`:80 --core --insecure --auth-token `cat scazdevopsToken`
