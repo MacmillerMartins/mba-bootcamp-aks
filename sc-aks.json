@@ -11,9 +11,9 @@
     "parameters": {
         "azureTenantId": "azureTenantIdTemp",
         "azureEnvironment": "AzureCloud",
-        "serviceAccountName": "azdev-sa-d4cd20",
-        "roleBindingName": "azdev-rb-azdev-sa-d4cd20-admin-on-default",
-        "secretName": "azdev-sa-d4cd20-token-k52pc",
+        "serviceAccountName": "serviceAccountNameTemp",
+        "roleBindingName": "roleBindingNameTemp",
+        "secretName": "secretNameTemp",
         "ApiToken": null,
         "serviceAccountCertificate": null
     },

@@ -29,6 +29,13 @@ variables:
   value: 'macmiller'
 - name: clusterId
   value: "/subscriptions/$(azureSubscriptionId)/resourcegroups/$(azureResourceGroup)/providers/Microsoft.ContainerService/managedClusters/$(kubernetesCluster)"
+# Azure Authorization
+- name: serviceAccountName
+  value: 'azdev-sa-d4cd20'
+- name: roleBindingName
+  value: 'azdev-rb-azdev-sa-d4cd20-admin-on-default'
+- name: secretName
+  value: 'azdev-sa-d4cd20-token-k52pc'
 
 
 stages:
@@ -103,6 +110,9 @@ stages:
           sed -i -e "s;azureSubscriptionNameTemp;$(azureSubscriptionName);" sc-aks.json
           sed -i -e "s;clusterIdTemp;$(clusterId);" sc-aks.json
           sed -i -e "s;azureTenantIdTemp;$(azureTenantId);" sc-aks.json
+          sed -i -e "s;serviceAccountNameTemp;$(serviceAccountName);" sc-aks.json
+          sed -i -e "s;roleBindingNameTemp;$(roleBindingName);" sc-aks.json
+          sed -i -e "s;secretNameTemp;$(secretName);" sc-aks.json
           sed -i -e "s;aksServiceConnectTemp;$(aksServiceConnect);" sc-aks.json
           sed -i -e "s;TeamProjectIdTemp;$(System.TeamProjectId);" sc-aks.json
     - task: Bash@3
